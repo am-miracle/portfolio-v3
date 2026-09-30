@@ -59,7 +59,7 @@ async function onPageLoad() {
   // honour #hash targets after a navigation, e.g. /#contact
   if (location.hash.length > 1) {
     const el = document.querySelector(decodeURIComponent(location.hash));
-    if (el) requestAnimationFrame(() => scrollToTarget(el as HTMLElement));
+    if (el) requestAnimationFrame(() => scrollToTarget(el as HTMLElement, true));
   }
 }
 
@@ -94,7 +94,7 @@ document.addEventListener('click', (e) => {
   if (!el) return;
   e.preventDefault();
   history.replaceState(null, '', url.hash);
-  scrollToTarget(el as HTMLElement);
+  scrollToTarget(el as HTMLElement, true);
 });
 
 document.addEventListener('click', (e) => {
