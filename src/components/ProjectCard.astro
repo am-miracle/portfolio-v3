@@ -41,14 +41,14 @@ const tones = {
       alt=""
       loading="lazy"
       decoding="async"
-      class="[aspect-ratio:16_/_10] w-full bg-ink object-contain object-center grayscale-[35%] transition-[transform,filter] duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.03] group-hover:grayscale-0"
+      class="aspect-ratio:16/10 w-full bg-ink object-contain object-center grayscale-35 transition-[transform,filter] duration-[1.2s] ease-out-expo group-hover:scale-[1.03] group-hover:grayscale-0"
     />
     <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--mx,50%)_var(--my,50%),rgba(215,255,62,0.25),transparent_45%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
   </a>
 
   <div class="flex flex-1 flex-col gap-4 p-5 sm:p-6">
     <h3 class="text-3xl leading-none font-bold tracking-[-0.04em] sm:text-4xl">
-      {href ? <a href={href} target="_blank" rel="noopener" class="link-u">{project.title}</a> : project.title}
+      <a href={href} target="_blank" rel="noopener" class="link-u">{project.title}</a>
     </h3>
     <p class="text-[15px] leading-relaxed opacity-80">{project.summary}</p>
     <ul class="mt-auto flex flex-wrap gap-2 pt-2">

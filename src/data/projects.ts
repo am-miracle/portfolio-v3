@@ -1,16 +1,16 @@
 export type ProjectCategory = 'product' | 'experiment';
 
-export interface Project {
+interface ProjectBase {
   title: string;
   summary: string;
   image: string;
   stack: string[];
   category: ProjectCategory;
-  live?: string;
-  source?: string;
   featured?: boolean;
   year?: string;
 }
+
+export type Project = ProjectBase & ({ live: string; source?: string } | { live?: string; source: string });
 
 export const projects: Project[] = [
   {
@@ -67,6 +67,7 @@ export const projects: Project[] = [
     image: '/images/meatvault.webp',
     stack: ['React', 'Chakra UI', 'Redux Toolkit', 'Headless CMS'],
     category: 'product',
+    live: 'https://themeatvault.ca/',
   },
   {
     title: 'Portfolio V2',

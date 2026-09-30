@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import Base from '@/layouts/Base.astro';
+import { site } from '@/data/site';
 import { getPosts, formatDate, readingTime, type Post } from '@/lib/hygraph';
 
 export const getStaticPaths = (async () => {
@@ -19,9 +20,26 @@ interface Props {
 const { post, next } = Astro.props;
 const mins = readingTime(post.content.text);
 const description = post.excerpt ?? post.content.text.slice(0, 155);
+const url = new URL(`/blog/${post.slug}`, site.url).href;
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    mainEntityOfPage: url,
+    headline: post.title,
+    description,
+    datePublished: post.date,
+    dateModified: post.date,
+    ...(post.coverImage?.url && { image: post.coverImage.url }),
+    keywords: post.tags,
+    inLanguage: 'en',
+    author: { '@id': `${site.url}/#person` },
+    publisher: { '@id': `${site.url}/#person` },
+  },
+];
 ---
 
-<Base title={post.title} description={description} image={post.coverImage?.url} type="article">
+<Base title={post.title} description={description} image={post.coverImage?.url} imageAlt={post.title} type="article" schema={schema}>
   <article class="container-x pt-10 lg:pt-16">
     <a href="/blog" class="label link-u text-paper/60" data-reveal>← Back to blog</a>
 
@@ -37,7 +55,7 @@ const description = post.excerpt ?? post.content.text.slice(0, 155);
     {
       post.coverImage?.url && (
         <figure class="card mt-14 overflow-hidden" data-reveal-clip>
-          <img src={post.coverImage.url} alt="" class="[aspect-ratio:21_/_9] w-full object-cover" />
+          <img src={post.coverImage.url} alt="" class="aspect-ratio:21/9 w-full object-cover" />
         </figure>
       )
     }

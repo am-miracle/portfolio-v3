@@ -3,7 +3,7 @@ export const site = {
   short: 'Miracle',
   role: 'Software Engineer',
   url: 'https://judemiracle.com',
-  location: 'Lagos, Nigeria',
+  location: 'Port harcourt, Nigeria',
   timezone: 'Africa/Lagos',
   cv: 'https://docs.google.com/document/d/1AwFGrXoryVv90ZqbgRxwgezyAW2ZDv_6Rkr-4yHijyM/edit?usp=sharing',
   description:

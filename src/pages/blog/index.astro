@@ -64,7 +64,6 @@ const medium = socials.find((s) => s.short === 'Md')!.href;
     }
   </section>
 
-  <!-- external -->
   <section class="container-x pt-24 lg:pt-36">
     <SectionHead index="B" label="Elsewhere" title="Published" accent="around the web." class="mb-12">
       <a href={medium} target="_blank" rel="noopener" class="btn btn-paper self-start lg:self-end" data-magnetic>Medium ↗</a>
@@ -96,7 +95,7 @@ const medium = socials.find((s) => s.short === 'Md')!.href;
         }
       </ul>
       <div class="pointer-events-none invisible absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0" data-hover-float aria-hidden="true">
-        <img src={externalArticles[0]?.image} alt="" class="[aspect-ratio:4_/_3] w-80 border-2 border-ink object-cover shadow-(--shadow-brutal)" />
+        <img src={externalArticles[0]?.image} alt="" class="aspect-4/3 w-80 border-2 border-ink object-cover shadow-(--shadow-brutal)" />
       </div>
     </div>
   </section>

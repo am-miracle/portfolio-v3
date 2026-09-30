@@ -1,7 +1,7 @@
 ---
 import '@/lib/styles/global.css';
 import { ClientRouter } from 'astro:transitions';
-import { site } from '@/data/site';
+import { site, socials } from '@/data/site';
 import Rail from '@/components/Rail.astro';
 import Header from '@/components/Header.astro';
 import Menu from '@/components/Menu.astro';
@@ -15,18 +15,65 @@ interface Props {
   description?: string;
   image?: string;
   type?: 'website' | 'article';
+  imageAlt?: string;
+  schema?: Record<string, unknown>[];
 }
 
 const {
   title,
   description = site.description,
-  image = '/images/miracle.webp',
+  image,
   type = 'website',
+  imageAlt,
+  schema = [],
 } = Astro.props;
 
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL(image, Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const cardName = { '/': 'home', '/about': 'about', '/projects': 'projects', '/blog': 'blog' }[path] ?? 'home';
+const ogImage = new URL(image ?? `/og/${cardName}.jpg`, Astro.site);
+const ogImageAlt = imageAlt ?? (image ? fullTitle : `${site.name}, ${site.role}`);
+
+const personId = `${site.url}/#person`;
+const crumbs = [{ name: 'Home', url: `${site.url}/` }];
+if (path !== '/') {
+  const parts = path.split('/').filter(Boolean);
+  if (parts[0] === 'blog' && parts.length > 1) crumbs.push({ name: 'Blog', url: `${site.url}/blog` });
+  crumbs.push({ name: title ?? fullTitle, url: canonical.href });
+}
+const graph = [
+  {
+    '@type': 'Person',
+    '@id': personId,
+    name: site.name,
+    jobTitle: site.role,
+    url: site.url,
+    image: new URL('/og/home.jpg', site.url).href,
+    description: site.description,
+    address: { '@type': 'PostalAddress', addressLocality: 'Port harcourt', addressCountry: 'NG' },
+    knowsAbout: ['React', 'Next.js', 'TypeScript', 'Rust', 'Go', 'Frontend engineering', 'Web developer', 'Technical writing'],
+    sameAs: socials.map((s) => s.href),
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    url: site.url,
+    name: site.name,
+    inLanguage: 'en',
+    publisher: { '@id': personId },
+  },
+  ...(path === '/'
+    ? []
+    : [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url })),
+        },
+      ]),
+  ...schema,
+];
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 ---
 
 <!doctype html>
@@ -45,11 +92,16 @@ const ogImage = new URL(image, Astro.site);
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content={site.twitter} />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -105,7 +157,7 @@ const ogImage = new URL(image, Astro.site);
 </html>
 
 <style is:global>
-  /* reveal targets start hidden only when JS is running */*/
+  /* reveal targets start hidden only when JS is running */
   html.js [data-reveal] {
     opacity: 0;
   }

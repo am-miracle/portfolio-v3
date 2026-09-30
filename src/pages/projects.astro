@@ -38,6 +38,7 @@ const github = socials.find((s) => s.short === 'Gh')!.href;
       }
     </div>
 
+    <h2 class="sr-only">Project gallery</h2>
     <div class="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
       {
         projects.map((p, i) => (
@@ -119,7 +120,7 @@ const github = socials.find((s) => s.short === 'Gh')!.href;
               href={pen.href}
               target="_blank"
               rel="noopener"
-              class="group card flex [aspect-ratio:4_/_3] flex-col justify-between bg-slate-900 p-6 transition-colors duration-500 hover:bg-acid hover:text-ink"
+              class="group card flex aspect-ratio:4/3 flex-col justify-between bg-slate-900 p-6 transition-colors duration-500 hover:bg-acid hover:text-ink"
               data-tilt
               data-cursor="Open"
             >
