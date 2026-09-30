@@ -1,0 +1,315 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+
+@theme {
+  /* Artoo slate-teal, pulled toward the teal of the portrait backdrop */
+  --color-slate-950: #151c1f;
+  --color-slate-900: #1f2a2e;
+  --color-slate-800: #2c3a3f;
+  --color-slate-700: #37474d;
+  --color-slate-600: #43545a;
+  --color-slate-500: #52656b;
+  --color-slate-400: #6c8087;
+  --color-slate-300: #93a5ab;
+
+  --color-ink: #0b0f10;
+  --color-paper: #ecefe8;
+  --color-mute: #a9b6b9;
+
+  /* neo-brutal pops */
+  --color-acid: #d7ff3e;
+  --color-flame: #ff6a3d;
+  --color-lilac: #b9a8ff;
+  --color-sky: #7fd8ff;
+
+  --font-sans: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --shadow-brutal-sm: 3px 3px 0 0 var(--color-ink);
+  --shadow-brutal: 6px 6px 0 0 var(--color-ink);
+  --shadow-brutal-lg: 10px 10px 0 0 var(--color-ink);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-blink: blink 1.1s steps(2, start) infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --rail: 0px;
+    --color-slate-950: #151c1f;
+    --color-slate-900: #1f2a2e;
+    --color-slate-800: #2c3a3f;
+    --color-slate-700: #37474d;
+    --color-slate-600: #43545a;
+    --color-slate-500: #52656b;
+    --color-slate-400: #6c8087;
+    --color-slate-300: #93a5ab;
+    --color-ink: #0b0f10;
+    --color-paper: #ecefe8;
+    --color-mute: #a9b6b9;
+    --color-acid: #d7ff3e;
+    --color-flame: #ff6a3d;
+    --color-lilac: #b9a8ff;
+    --color-sky: #7fd8ff;
+    --shadow-brutal-sm: 3px 3px 0 0 var(--color-ink);
+    --shadow-brutal: 6px 6px 0 0 var(--color-ink);
+    --shadow-brutal-lg: 10px 10px 0 0 var(--color-ink);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+    color-scheme: dark;
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --rail: 96px;
+    }
+  }
+
+  html {
+    background: var(--color-slate-800);
+    -webkit-text-size-adjust: 100%;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  body {
+    @apply font-sans text-paper antialiased;
+    background:
+      radial-gradient(120% 80% at 60% 20%, #5a6c72 0%, transparent 60%),
+      linear-gradient(180deg, var(--color-slate-600) 0%, var(--color-slate-800) 70%, var(--color-slate-900) 100%);
+    background-attachment: fixed;
+    min-height: 100dvh;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-acid);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-acid);
+    outline-offset: 3px;
+  }
+
+  img {
+    user-select: none;
+  }
+
+  /* hide native cursor only when the custom one is running */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-12;
+  }
+
+  .label {
+    @apply font-mono text-[11px] font-medium tracking-[0.2em] uppercase;
+  }
+
+  .serif {
+    @apply font-serif font-normal italic tracking-normal;
+  }
+
+  /* neo-brutal primitives */
+  .brutal {
+    border: 2px solid var(--color-ink);
+    box-shadow: var(--shadow-brutal);
+  }
+
+  .btn {
+    @apply relative inline-flex items-center gap-3 border-2 border-ink px-6 py-3.5 font-semibold tracking-tight text-ink select-none;
+    background: var(--btn-bg, var(--color-acid));
+    box-shadow: var(--shadow-brutal);
+    transition:
+      translate 0.25s var(--ease-out-expo),
+      box-shadow 0.25s var(--ease-out-expo),
+      background-color 0.2s;
+  }
+  /* `translate` (not transform) so it composes with GSAP's magnetic x/y */
+  .btn:hover {
+    translate: -3px -3px;
+    box-shadow: 9px 9px 0 0 var(--color-ink);
+  }
+  .btn:active {
+    translate: 6px 6px;
+    box-shadow: 0 0 0 0 var(--color-ink);
+  }
+  .btn-ghost {
+    --btn-bg: var(--color-slate-500);
+    @apply text-paper;
+  }
+  .btn-paper {
+    --btn-bg: var(--color-paper);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 border-2 border-ink bg-slate-700 px-3 py-1.5 font-mono text-xs;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+
+  .card {
+    @apply relative border-2 border-ink bg-slate-700;
+    box-shadow: var(--shadow-brutal);
+  }
+
+  .link-u {
+    background: linear-gradient(currentColor 0 0) 0 100% / 0 2px no-repeat;
+    transition: background-size 0.45s var(--ease-out-expo);
+  }
+  .link-u:hover,
+  .link-u:focus-visible {
+    background-size: 100% 2px;
+  }
+
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-paper) 30%, transparent);
+  }
+
+  /* SplitText targets */
+  .split-line {
+    display: block;
+    overflow: clip;
+    overflow-clip-margin: 0.12em;
+    padding-bottom: 0.06em;
+  }
+  .split-word {
+    display: inline-block;
+    will-change: transform;
+  }
+
+  /* blog prose */
+  .prose-brutal {
+    @apply text-[1.075rem] leading-[1.8] text-paper/85;
+  }
+  .prose-brutal > * + * {
+    @apply mt-6;
+  }
+  .prose-brutal h2 {
+    @apply mt-14 text-3xl font-bold tracking-tight text-paper;
+  }
+  .prose-brutal h3 {
+    @apply mt-10 text-2xl font-semibold text-paper;
+  }
+  .prose-brutal a {
+    @apply text-acid underline decoration-2 underline-offset-4;
+  }
+  .prose-brutal strong {
+    @apply text-paper;
+  }
+  .prose-brutal ul {
+    @apply list-disc pl-6;
+  }
+  .prose-brutal ol {
+    @apply list-decimal pl-6;
+  }
+  .prose-brutal li + li {
+    @apply mt-2;
+  }
+  .prose-brutal blockquote {
+    @apply border-l-4 border-acid bg-slate-700/60 py-3 pl-5 text-paper italic;
+  }
+  .prose-brutal pre {
+    @apply overflow-x-auto border-2 border-ink bg-slate-950 p-5 font-mono text-sm leading-relaxed;
+    box-shadow: var(--shadow-brutal);
+  }
+  .prose-brutal :not(pre) > code {
+    @apply bg-slate-950 px-1.5 py-0.5 font-mono text-[0.9em] text-acid;
+  }
+  .prose-brutal img {
+    @apply w-full border-2 border-ink;
+    box-shadow: var(--shadow-brutal);
+  }
+  .prose-brutal table {
+    @apply w-full border-2 border-ink text-sm;
+  }
+  .prose-brutal th,
+  .prose-brutal td {
+    @apply border border-ink/60 px-3 py-2 text-left;
+  }
+}
+
+@layer utilities {
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain 0.8s steps(4) infinite;
+  }
+  @keyframes grain {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-3%, 2%);
+    }
+    50% {
+      transform: translate(2%, -4%);
+    }
+    75% {
+      transform: translate(-2%, 3%);
+    }
+  }
+
+  /* initial transforms for GSAP-driven elements (Tailwind v4 scale-* uses the `scale` property, which would compound) */
+  .tf-sy0 {
+    transform: scaleY(0);
+  }
+  .tf-sx0 {
+    transform: scaleX(0);
+  }
+  .tf-s0 {
+    transform: scale(0);
+  }
+
+  .pl-rail {
+    padding-left: var(--rail);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .grain::after {
+    animation: none;
+  }
+}

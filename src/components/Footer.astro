@@ -1,0 +1,57 @@
+---
+import { site, socials, nav } from '@/data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="relative mt-24 overflow-hidden border-t-2 border-ink bg-slate-900 lg:mt-40">
+  <div class="container-x grid gap-12 py-16 lg:grid-cols-12 lg:py-24">
+    <div class="lg:col-span-7">
+      <p class="label mb-6 text-acid">/ Next step</p>
+      <h2 class="text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] font-bold tracking-[-0.04em]" data-split>
+        Got something <span class="serif text-acid">worth</span> building?
+      </h2>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a href="/#contact" class="btn" data-magnetic data-cursor="Write">Start a project</a>
+        <a href={site.cv} target="_blank" rel="noopener" class="btn btn-paper" data-magnetic data-cursor="CV">Download CV</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 lg:col-span-5 lg:pl-12">
+      <div>
+        <p class="label mb-5 text-paper/80">Pages</p>
+        <ul class="space-y-3 text-lg">
+          <li><a href="/" class="link-u">Home</a></li>
+          {nav.map((n) => <li><a href={n.href} class="link-u">{n.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="label mb-5 text-paper/80">Elsewhere</p>
+        <ul class="space-y-3 text-lg">
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener" class="link-u">
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-x select-none" aria-hidden="true">
+    <p class="flex justify-between overflow-hidden text-[19.5vw] leading-[0.78] font-bold tracking-[-0.06em] text-slate-700 lg:text-[16.5vw]" data-wordmark>
+      {'MIRACLE'.split('').map((c) => <span class="inline-block">{c}</span>)}
+    </p>
+  </div>
+
+  <div class="border-t-2 border-ink bg-acid text-ink">
+    <div class="container-x flex flex-wrap items-center justify-between gap-4 py-4 font-mono text-xs">
+      <span>© {year} {site.name}</span>
+      <span>{site.location}, <span data-clock>--:--</span> WAT</span>
+      <button type="button" class="link-u font-bold uppercase" data-to-top>Back to top ↑</button>
+    </div>
+  </div>
+</footer>

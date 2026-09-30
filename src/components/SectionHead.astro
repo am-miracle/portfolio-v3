@@ -1,0 +1,23 @@
+---
+interface Props {
+  index: string;
+  label: string;
+  title: string;
+  accent?: string;
+  class?: string;
+}
+const { index, label, title, accent, class: className } = Astro.props;
+---
+
+<div class:list={['flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between', className]}>
+  <div>
+    <p class="label mb-5 flex items-center gap-3 text-paper/60" data-reveal>
+      <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/{index}</span>
+      {label}
+    </p>
+    <h2 class="max-w-4xl text-[clamp(2.6rem,6.5vw,6rem)] leading-[0.92] font-bold tracking-[-0.045em]" data-split>
+      {title} {accent && <span class="serif text-acid">{accent}</span>}
+    </h2>
+  </div>
+  <slot />
+</div>

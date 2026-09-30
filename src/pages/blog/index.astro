@@ -1,0 +1,103 @@
+---
+import Base from '@/layouts/Base.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import { externalArticles, publications } from '@/data/articles';
+import { getPosts, formatDate, readingTime } from '@/lib/hygraph';
+import { socials } from '@/data/site';
+
+const posts = await getPosts();
+const medium = socials.find((s) => s.short === 'Md')!.href;
+---
+
+<Base title="Blog" description="Articles and notes by Miracle Jude on frontend engineering, developer tools, Rust and Go.">
+  <section class="container-x pt-10 lg:pt-16">
+    <p class="label mb-8 flex items-center gap-3 text-paper/60" data-reveal>
+      <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/03</span> Blog
+    </p>
+    <h1 class="text-[clamp(3.2rem,11vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em]" data-split>
+      Writing <span class="serif text-acid">it</span> down.
+    </h1>
+    <p class="mt-10 max-w-xl text-lg text-paper/65" data-reveal>
+      Tutorials, deep dives and notes on the tools I reach for day to day. Published here and on {publications.slice(0, 4).join(', ')}
+      {" "}and more.
+    </p>
+  </section>
+
+  <section class="container-x pt-20 lg:pt-28">
+    <SectionHead index="A" label="On this site" title="Latest" accent="posts." class="mb-12" />
+    {
+      posts.length ? (
+        <ul class="grid gap-8 md:grid-cols-3">
+          {posts.map((p, i) => {
+            const mins = readingTime(p.content?.text);
+            return (
+              <li data-reveal>
+                <a href={`/blog/${p.slug}`} class="group card flex h-full flex-col bg-slate-700 transition-colors duration-500 hover:bg-paper hover:text-ink" data-tilt data-cursor="Read">
+                  {p.coverImage?.url && (
+                    <div class="overflow-hidden border-b-2 border-ink">
+                      <img src={p.coverImage.url} alt="" loading="lazy" class="aspect-video w-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
+                    </div>
+                  )}
+                  <div class="flex flex-1 flex-col gap-4 p-4 sm:p-8">
+                    <p class="label flex flex-wrap gap-3 opacity-70">
+                      <span>{String(i + 1).padStart(2, '0')}</span>
+                      <span>{formatDate(p.date)}</span>
+                      {mins && <span>{mins} min read</span>}
+                    </p>
+                    <h2 class="text-3xl leading-[1.05] font-bold tracking-[-0.035em]">{p.title}</h2>
+                    {p.excerpt && <p class="line-clamp-3 opacity-70">{p.excerpt}</p>}
+                    <!-- <ul class="mt-auto flex flex-wrap gap-2 pt-2">
+                      {p.tags.map((t) => <li class="border-2 border-current px-2 py-0.5 font-mono text-[11px]">{t}</li>)}
+                    </ul> -->
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div class="card bg-slate-900 p-8 text-center sm:p-14" data-reveal>
+          <p class="text-3xl font-bold tracking-tight">Fresh posts are on the way.</p>
+          <p class="mt-3 text-paper/60">Meanwhile, the published pieces below are the good stuff.</p>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- external -->
+  <section class="container-x pt-24 lg:pt-36">
+    <SectionHead index="B" label="Elsewhere" title="Published" accent="around the web." class="mb-12">
+      <a href={medium} target="_blank" rel="noopener" class="btn btn-paper self-start lg:self-end" data-magnetic>Medium ↗</a>
+    </SectionHead>
+
+    <div class="relative" data-hover-list>
+      <ul class="border-t-2 border-ink">
+        {
+          externalArticles.map((a, i) => (
+            <li class="border-b-2 border-ink" data-reveal>
+              <a
+                href={a.href}
+                target="_blank"
+                rel="noopener"
+                class="group grid grid-cols-[2.5rem_1fr_auto] items-start gap-4 py-8 transition-[padding,background-color] duration-500 hover:bg-acid hover:px-4 hover:text-ink sm:grid-cols-[4rem_1fr_10rem_auto] sm:items-center sm:py-10"
+                data-hover-src={a.image}
+                data-cursor="Read"
+              >
+                <span class="font-mono text-sm opacity-50">{String(i + 1).padStart(2, '0')}</span>
+                <span>
+                  <span class="block text-[clamp(1.4rem,3vw,2.6rem)] leading-tight font-semibold tracking-[-0.03em]">{a.title}</span>
+                  <span class="mt-2 block max-w-2xl text-base opacity-65">{a.summary}</span>
+                </span>
+                <span class="label hidden opacity-70 sm:block">{a.publication}</span>
+                <span class="grid size-11 place-items-center border-2 border-current transition-transform duration-500 group-hover:-rotate-45">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="pointer-events-none invisible absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0" data-hover-float aria-hidden="true">
+        <img src={externalArticles[0]?.image} alt="" class="[aspect-ratio:4_/_3] w-80 border-2 border-ink object-cover shadow-(--shadow-brutal)" />
+      </div>
+    </div>
+  </section>
+</Base>

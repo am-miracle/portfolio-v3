@@ -1,0 +1,143 @@
+---
+import Base from '@/layouts/Base.astro';
+import Marquee from '@/components/Marquee.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import { experience, skills } from '@/data/experience';
+import { site } from '@/data/site';
+
+const skillTones = ['bg-acid', 'bg-lilac', 'bg-sky', 'bg-flame'];
+---
+
+<Base title="About" description="About Miracle Jude, a software engineer who works across the stack with deeper frontend engineering knowledge, based in Lagos, Nigeria.">
+  <section class="container-x pt-10 pb-20 lg:pt-16 lg:pb-32">
+    <p class="label mb-8 flex items-center gap-3 text-paper/60" data-reveal>
+      <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/01</span> About
+    </p>
+    <h1 class="text-[clamp(3.2rem,11vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em]" data-split>
+      Hello, I'm <span class="serif text-acid">Miracle</span> Jude.
+    </h1>
+
+    <div class="mt-16 grid gap-14 lg:mt-24 lg:grid-cols-12">
+      <div class="relative lg:col-span-5">
+        <figure class="card relative overflow-hidden bg-slate-900 lg:sticky lg:top-28" data-tilt>
+          <div class="flex items-center justify-between border-b-2 border-ink bg-paper px-4 py-2 font-mono text-xs text-ink">
+            <span>miracle_jude.jpg</span><span>1333 × 2000</span>
+          </div>
+          <div data-reveal-clip>
+            <img src="/images/miracle.webp" alt="Miracle Jude seated, wearing a grey sweatshirt" width="900" height="1350" class="[aspect-ratio:4_/_5] w-full object-cover object-top" loading="eager" />
+          </div>
+          <figcaption class="flex items-center justify-between border-t-2 border-ink bg-acid px-4 py-3 font-mono text-xs font-bold text-ink">
+            <span>{site.location}</span><span><span data-clock>--:--</span> WAT</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="space-y-7 text-lg leading-[1.75] text-paper/75 lg:col-span-7 lg:pl-8 lg:text-xl">
+        <p class="text-2xl leading-snug font-semibold text-paper lg:text-[2rem]" data-reveal>
+          I'm a software engineer who enjoys building products people can actually use.
+        </p>
+        <p data-reveal>
+          I work across the stack, with deeper knowledge in frontend engineering. I build accessible, responsive interfaces with React,
+          TypeScript and Next.js, and I care a lot about the small details that make a product feel clear, fast and reliable. I like working
+          where design and engineering meet.
+        </p>
+        <p data-reveal>
+          Right now, I'm a Software Engineer at <a href="https://www.linkedin.com/company/khoomi/posts/" target="_blank" rel="noopener" class="link-u text-acid">Khoomi</a>,
+          an African marketplace for handmade goods. I work across frontend and backend, building product flows and Go backend systems for
+          multi-vendor orders, inventory, shipping, seller wallets, payouts, notifications and moderation.
+        </p>
+        <p data-reveal>
+          I'm currently exploring Kubernetes. I enjoy building scalable systems and figuring out how things work under the hood.
+        </p>
+        <p data-reveal>
+          I also write technical articles and documentation for teams like LogRocket, Decodo, Cyfrin, LTV Protocol and OpenReplay. Writing
+          helps me slow down, understand what I'm doing and explain it in a useful way.
+        </p>
+        <p data-reveal>
+          In my spare time, I like playing football, watching my favorite team play and staying consistent at the gym.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-4" data-reveal>
+          <a href={site.cv} target="_blank" rel="noopener" class="btn" data-magnetic data-cursor="CV">Download CV ↗</a>
+          <a href="/#contact" class="btn btn-ghost" data-magnetic>Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Marquee
+    items={['Ship fast', 'Own the problem', 'Write it down', 'Accessible by default', 'Measure, then optimise']}
+    class="rotate-[-1.5deg] border-y-2 border-ink bg-lilac py-4 text-3xl font-bold tracking-tight text-ink shadow-(--shadow-brutal) sm:text-5xl"
+  />
+
+  <section class="container-x py-24 lg:py-36">
+    <SectionHead index="02" label="Experience" title="Where I've" accent="shipped." class="mb-14 lg:mb-20">
+      <p class="max-w-sm text-paper/60" data-reveal>Click any role to expand it. Numbers are real; I measured them.</p>
+    </SectionHead>
+
+    <ol class="border-t-2 border-ink">
+      {
+        experience.map((r, i) => (
+          <li class="group/row border-b-2 border-ink" data-accordion data-reveal>
+            <h3>
+              <button
+                type="button"
+                class="grid w-full grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-6 text-left transition-[background-color,padding] duration-500 hover:bg-slate-700 hover:px-4 sm:grid-cols-[4rem_1fr_14rem_auto] sm:py-8 group-data-open/row:bg-acid group-data-open/row:px-4 group-data-open/row:text-ink"
+                aria-expanded="false"
+                aria-controls={`role-${i}`}
+                data-accordion-btn
+              >
+                <span class="font-mono text-sm opacity-50">{String(i + 1).padStart(2, '0')}</span>
+                <span>
+                  <span class="block text-[clamp(1.4rem,3vw,2.5rem)] leading-tight font-bold tracking-[-0.035em]">{r.company}</span>
+                  <span class="mt-1 block text-base opacity-70">{r.title}</span>
+                </span>
+                <span class="label hidden opacity-70 sm:block">{r.period}</span>
+                <span class="grid size-11 place-items-center border-2 border-current text-xl transition-transform duration-500 group-data-open/row:rotate-45" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div id={`role-${i}`} class="h-0 overflow-hidden" data-accordion-panel>
+              <div class="grid gap-4 pt-2 pb-8 sm:grid-cols-[4rem_1fr] sm:pl-4">
+                <span class="label opacity-60 sm:hidden">{r.period}</span>
+                <ul class="space-y-3 text-lg text-paper/75 sm:col-start-2">
+                  {r.points.map((p) => (
+                    <li class="flex gap-3">
+                      <span class="mt-2.5 size-2 shrink-0 bg-acid" aria-hidden="true" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+                {
+                  r.href && (
+                    <a href={r.href} target="_blank" rel="noopener" class="link-u w-fit text-paper/80 sm:col-start-2">
+                      View {r.company} ↗
+                    </a>
+                  )
+                }
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container-x">
+    <SectionHead index="03" label="Toolbox" title="What's in the" accent="toolbox." class="mb-14 lg:mb-20" />
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        Object.entries(skills).map(([group, items], i) => (
+          <div class="card flex flex-col bg-slate-700" data-reveal data-tilt>
+            <p class:list={['border-b-2 border-ink px-5 py-3 font-mono text-sm font-bold text-ink', skillTones[i]]}>{group}</p>
+            <ul class="flex flex-wrap gap-2 p-5">
+              {items.map((s) => (
+                <li class="border-2 border-ink bg-slate-900 px-3 py-1.5 text-sm font-medium transition-[translate,background-color,color] duration-300 hover:-translate-y-1 hover:bg-paper hover:text-ink">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>

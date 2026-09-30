@@ -1,0 +1,72 @@
+---
+import { nav, socials, site } from '@/data/site';
+const links = [{ label: 'Home', href: '/', index: '00' }, ...nav, { label: 'Contact', href: '/#contact', index: '04' }];
+---
+
+<div
+  id="site-menu"
+  class="invisible fixed inset-0 z-120 flex flex-col bg-acid text-ink [clip-path:inset(0_0_100%_0)]"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+  transition:persist="menu"
+  data-menu
+  data-lenis-prevent
+>
+  <div class="container-x flex h-20 items-center justify-between lg:h-24">
+    <span class="label">Menu / Navigate</span>
+    <button
+      type="button"
+      class="group grid size-14 place-items-center border-2 border-ink bg-paper shadow-(--shadow-brutal-sm) transition-transform hover:rotate-90"
+      data-menu-close
+      aria-label="Close menu"
+      data-cursor="Close"
+    >
+      <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path d="M5 5l14 14M19 5L5 19"></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="container-x flex flex-1 flex-col justify-center" aria-label="Menu">
+    <ul class="border-t-2 border-ink">
+      {
+        links.map((l) => (
+          <li class="overflow-hidden border-b-2 border-ink">
+            <a
+              href={l.href}
+              class="group flex items-center justify-between gap-4 py-2 sm:py-3"
+              data-menu-link
+              data-cursor="Go"
+            >
+              <span class="flex items-baseline gap-4 sm:gap-8" data-menu-item>
+                <span class="label w-8">{l.index}</span>
+                <span class="text-[clamp(2.75rem,9vw,7.5rem)] leading-[0.95] font-bold tracking-[-0.04em] transition-[letter-spacing,transform] duration-500 group-hover:translate-x-4 group-hover:tracking-[-0.01em]">
+                  {l.label}
+                </span>
+              </span>
+              <svg viewBox="0 0 24 24" class="size-10 -rotate-45 opacity-0 transition-all duration-500 group-hover:rotate-0 group-hover:opacity-100 sm:size-16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 12h16m-6-6 6 6-6 6" />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="container-x flex flex-wrap items-end justify-between gap-6 py-8">
+    <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      {
+        socials.map((s) => (
+          <li>
+            <a href={s.href} target="_blank" rel="noopener" class="link-u font-semibold">
+              {s.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="label">{site.location} · <span data-clock>--:--</span> WAT</p>
+  </div>
+</div>

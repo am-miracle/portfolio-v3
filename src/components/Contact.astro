@@ -1,0 +1,107 @@
+---
+import { socials } from '@/data/site';
+
+const contactSocials = socials.filter((s) => s.short === 'In' || s.short === 'X');
+---
+
+<section id="contact" class="container-x scroll-mt-10 pt-28 lg:pt-44">
+  <div class="grid gap-14 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <p class="label mb-5 flex items-center gap-3 text-paper/60" data-reveal>
+        <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/05</span> Contact
+      </p>
+      <h2 class="text-[clamp(2.8rem,7vw,6.5rem)] leading-[0.9] font-bold tracking-tighter" data-split>
+        Let's build something <span class="serif text-acid">useful.</span>
+      </h2>
+      <p class="mt-8 max-w-md text-lg text-paper/70" data-reveal>
+        Have a project in mind, a role to fill, or a technical problem to talk through? Send me a message. I read everything.
+      </p>
+      <ul class="mt-10 flex flex-wrap gap-3" data-reveal>
+        {
+          contactSocials.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener" class="chip transition-transform hover:-translate-y-1 hover:bg-acid hover:text-ink">
+                {s.label} ↗
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="lg:col-span-7">
+      <p class="mb-6 border-2 border-ink bg-acid p-4 font-semibold text-ink shadow-(--shadow-brutal)" data-contact-status hidden role="status">
+        Thanks for the message. I'll get back to you as soon as I can.
+      </p>
+      <form
+        name="contact"
+        method="POST"
+        action="/?success#contact"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-astro-reload
+        class="card grid gap-0 bg-paper text-ink"
+        data-contact
+        data-reveal
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden"><label>Leave this empty <input name="bot-field" /></label></p>
+
+        <div class="flex items-center justify-between border-b-2 border-ink bg-ink px-5 py-3 font-mono text-xs text-paper">
+          <span>new_message.txt</span>
+          <span class="flex gap-1.5" aria-hidden="true"><span class="size-3 bg-flame"></span><span class="size-3 bg-acid"></span><span class="size-3 bg-lilac"></span></span>
+        </div>
+
+        <div class="grid sm:grid-cols-2">
+          <label class="field border-b-2 border-ink sm:border-r-2">
+            <span class="label">01. Name</span>
+            <input name="name" type="text" required autocomplete="name" placeholder="Ada Lovelace" />
+          </label>
+          <label class="field border-b-2 border-ink">
+            <span class="label">02. Email</span>
+            <input name="email" type="email" required autocomplete="email" placeholder="ada@engine.com" />
+          </label>
+        </div>
+        <label class="field border-b-2 border-ink">
+          <span class="label">03. Subject (optional)</span>
+          <input name="subject" type="text" placeholder="New project" />
+        </label>
+        <label class="field border-b-2 border-ink">
+          <span class="label flex justify-between">04. Message <span><span data-count-left>1000</span> left</span></span>
+          <textarea name="message" rows="6" maxlength="1000" required placeholder="Tell me about it…"></textarea>
+        </label>
+        <div class="flex flex-wrap items-center justify-between gap-4 p-5">
+          <span class="font-mono text-xs opacity-60">Usually replies within 48h.</span>
+          <button type="submit" class="btn" data-magnetic data-cursor="Send">
+            Send message
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .field {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.1rem 1.25rem;
+    transition: background-color 0.3s;
+  }
+  .field:focus-within {
+    background: var(--color-acid);
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: transparent;
+    font-size: 1.25rem;
+    font-weight: 500;
+    outline: none;
+    resize: vertical;
+  }
+  .field ::placeholder {
+    color: color-mix(in oklab, var(--color-ink) 35%, transparent);
+  }
+</style>

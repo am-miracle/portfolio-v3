@@ -1,0 +1,28 @@
+---
+interface Props {
+  items: readonly string[];
+  reverse?: boolean;
+  speed?: number;
+  class?: string;
+}
+const { items, reverse = false, speed = 28, class: className } = Astro.props;
+// duplicate so the -50% loop is seamless
+const run = [...items, ...items];
+---
+
+<div class:list={['overflow-hidden', className]} data-marquee={reverse ? 'reverse' : 'forward'} data-speed={speed} aria-hidden="true">
+  <div class="flex w-max will-change-transform">
+    {
+      [0, 1].map(() => (
+        <ul class="flex shrink-0 items-center">
+          {run.map((item) => (
+            <li class="flex items-center gap-8 px-4 whitespace-nowrap">
+              <span>{item}</span>
+              <svg viewBox="0 0 24 24" class="size-[0.6em] shrink-0" fill="currentColor"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" /></svg>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

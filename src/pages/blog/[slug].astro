@@ -1,0 +1,60 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '@/layouts/Base.astro';
+import { getPosts, formatDate, readingTime, type Post } from '@/lib/hygraph';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.slug },
+    props: { post, next: posts[i + 1] ?? posts[0] },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+  next?: Post;
+}
+
+const { post, next } = Astro.props;
+const mins = readingTime(post.content.text);
+const description = post.excerpt ?? post.content.text.slice(0, 155);
+---
+
+<Base title={post.title} description={description} image={post.coverImage?.url} type="article">
+  <article class="container-x pt-10 lg:pt-16">
+    <a href="/blog" class="label link-u text-paper/60" data-reveal>← Back to blog</a>
+
+    <header class="mt-10 max-w-5xl">
+      <p class="label flex flex-wrap gap-3 text-paper/60" data-reveal>
+        <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">{formatDate(post.date)}</span>
+        {mins && <span class="border-2 border-ink bg-slate-700 px-2 py-0.5">{mins} min read</span>}
+        {post.tags.map((t) => <span class="border-2 border-ink bg-slate-700 px-2 py-0.5">{t}</span>)}
+      </p>
+      <h1 class="mt-8 text-[clamp(2.4rem,6.5vw,6rem)] leading-[0.95] font-bold tracking-tighter" data-split>{post.title}</h1>
+    </header>
+
+    {
+      post.coverImage?.url && (
+        <figure class="card mt-14 overflow-hidden" data-reveal-clip>
+          <img src={post.coverImage.url} alt="" class="[aspect-ratio:21_/_9] w-full object-cover" />
+        </figure>
+      )
+    }
+
+    <div class="prose-brutal mx-auto mt-16 max-w-3xl" set:html={post.content.html} data-reveal />
+
+    {
+      next && next.slug !== post.slug && (
+        <a
+          href={`/blog/${next.slug}`}
+          class="group card mx-auto mt-24 block max-w-3xl bg-acid p-8 text-ink transition-colors hover:bg-paper sm:p-10"
+          data-cursor="Next"
+        >
+          <span class="label">Read next →</span>
+          <span class="mt-4 block text-3xl leading-tight font-bold tracking-[-0.03em] sm:text-4xl">{next.title}</span>
+        </a>
+      )
+    }
+  </article>
+</Base>

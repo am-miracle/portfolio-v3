@@ -1,0 +1,257 @@
+---
+import Base from '@/layouts/Base.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import Contact from '@/components/Contact.astro';
+import { capabilities, site } from '@/data/site';
+import { projects } from '@/data/projects';
+import { experience } from '@/data/experience';
+import { externalArticles } from '@/data/articles';
+import { getPosts, formatDate } from '@/lib/hygraph';
+
+const featured = projects.filter((p) => p.featured);
+const current = experience.filter((r) => r.period.endsWith('Present')).slice(0, 2);
+const posts = (await getPosts()).slice(0, 3);
+const latestExternal = externalArticles[0]!;
+const latestPost = posts[0];
+const latest = latestPost
+  ? {
+      title: latestPost.title,
+      summary: latestPost.excerpt ?? `Published ${formatDate(latestPost.date)}.`,
+      publication: 'Blog',
+      href: `/blog/${latestPost.slug}`,
+      image: latestPost.coverImage?.url ?? '/images/portrait-sm.webp',
+      external: false,
+    }
+  : { ...latestExternal, external: true };
+const tones = ['paper', 'acid', 'lilac', 'sky', 'flame', 'paper'] as const;
+const capTones = ['bg-paper', 'bg-acid', 'bg-lilac'];
+
+const writing = [
+  ...posts.map((p) => ({
+    title: p.title,
+    meta: formatDate(p.date),
+    href: `/blog/${p.slug}`,
+    image: p.coverImage?.url ?? '/images/portrait-sm.webp',
+    external: false,
+  })),
+  ...externalArticles.map((a) => ({ title: a.title, meta: a.publication, href: a.href, image: a.image, external: true })),
+].slice(0, 5);
+---
+
+<Base>
+  <section class="relative isolate" data-hero>
+    <div class="pointer-events-none absolute inset-x-0 top-[6%] -z-10 flex flex-col items-center leading-[0.8] select-none lg:top-[10%]" data-hero-bg aria-hidden="true">
+      <span class="outline-text text-[26vw] opacity-60 font-bold tracking-[-0.06em] whitespace-nowrap lg:text-[19vw]">MIRACLE</span>
+    </div>
+
+    <div class="container-x relative grid min-h-[calc(100svh-5rem)] grid-cols-1 items-center gap-y-8 pb-8 lg:min-h-[calc(100svh-6rem-13rem)] lg:grid-cols-12 lg:gap-x-6 lg:pb-0">
+      <div class="order-3 lg:order-1 lg:col-span-3 lg:self-center" data-hero-side>
+        <p class="text-xl font-medium" data-reveal>/01</p>
+        <div class="relative mt-3 h-0.75 w-full max-w-64 bg-paper/15" data-reveal>
+          <span class="absolute inset-y-0 left-0 w-3/5 bg-acid" data-hero-bar></span>
+        </div>
+        <p class="mt-6 text-xl font-semibold" data-reveal>{site.role}</p>
+        <ul class="mt-2 space-y-1.5 text-[15px] text-paper/55" data-reveal>
+          <li>frontend-leaning</li>
+          <li class="flex items-center gap-2"><span class="size-2 animate-pulse rounded-full bg-acid"></span> Open to new work</li>
+        </ul>
+      </div>
+
+      <div class="relative order-2 mx-auto w-full max-w-130 lg:col-span-5 lg:max-w-none">
+        <div
+          class="relative mx-auto [aspect-ratio:958_/_1400] h-auto max-h-[72svh] w-full mask-[linear-gradient(to_bottom,#000_82%,transparent)] lg:h-[min(62svh,720px)] lg:w-auto"
+          data-portrait
+          data-color="/model/portrait.webp"
+          data-depth="/model/depth.png"
+          data-cursor="Move me"
+        >
+          <img src="/images/portrait-sm.webp" alt="Portrait of Miracle Jude" class="absolute inset-0 size-full object-contain" fetchpriority="high" />
+        </div>
+        <div class="pointer-events-none absolute bottom-[-2%] left-1/2 h-10 w-3/4 -translate-x-1/2 rounded-[50%] bg-slate-950/60 blur-2xl" aria-hidden="true"></div>
+        <span class="chip absolute top-[12%] -left-1 rotate-[-8deg] bg-acid text-ink sm:left-2 lg:-left-6" data-reveal>5+ yrs shipping</span>
+      </div>
+
+      <div class="order-1 pt-4 lg:order-3 lg:col-span-4 lg:pt-0 lg:pl-4" data-hero-side>
+        <h1 class="text-[clamp(2.6rem,4.6vw,4.6rem)] leading-[0.98] font-bold tracking-[-0.045em]" data-hero-title>
+          I build clean, usable <span class="serif font-normal text-acid">web&nbsp;products.</span>
+        </h1>
+        <p class="mt-6 max-w-md text-[16px] leading-relaxed text-paper/65" data-reveal>
+          I work across the stack, with deeper frontend engineering experience in React, Next.js and TypeScript. I care about interfaces that
+          feel simple, accessible and do not get in the user's way.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4" data-reveal>
+          <a href="/projects" class="btn" data-magnetic data-cursor="Explore">See my work</a>
+          <a href="/about" class="btn btn-ghost" data-magnetic>About me</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid overflow-hidden border-y-2 border-ink bg-slate-600/70 backdrop-blur lg:h-52 lg:grid-cols-[1fr_14rem_1fr]" data-hero-strip>
+      <div class="px-4 py-7 sm:px-6 lg:px-10">
+        <p class="label mb-5 text-paper/80">Now</p>
+        <ul class="grid gap-6 sm:grid-cols-2">
+          {
+            current.map((r) => (
+              <li>
+                <p class="font-medium">
+                  {r.title},
+                  {r.href ? (
+                    <a href={r.href} target="_blank" rel="noopener" class="link-u ml-1">
+                      {r.company}
+                    </a>
+                  ) : (
+                    <span> {r.company}</span>
+                  )}
+                </p>
+                <p class="mt-1.5 text-[15px] text-paper/50">{r.period}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-5 flex gap-1.5" aria-hidden="true"><span class="size-1.5 bg-paper"></span><span class="size-1.5 bg-paper/40"></span><span class="size-1.5 bg-paper/40"></span></p>
+      </div>
+      <a href={latest.href} target={latest.external ? '_blank' : undefined} rel={latest.external ? 'noopener' : undefined} class="group relative hidden overflow-hidden border-x-2 border-ink lg:block" data-cursor="Read" aria-label={`Read: ${latest.title}`}>
+        <img src={latest.image} alt="" class="size-full bg-ink object-contain grayscale transition-all duration-1000 group-hover:scale-105 group-hover:grayscale-0" loading="lazy" />
+      </a>
+      <div class="border-t-2 border-ink px-4 py-7 sm:px-6 lg:border-t-0 lg:px-10">
+        <p class="label mb-5 text-paper/80">Latest writing</p>
+        <p class="font-medium">{latest.title}</p>
+        <p class="mt-1.5 line-clamp-2 max-w-lg text-[15px] text-paper/50">{latest.summary}</p>
+        <a href={latest.href} target={latest.external ? '_blank' : undefined} rel={latest.external ? 'noopener' : undefined} class="link-u mt-3 inline-block text-[15px] text-paper/80">Read on {latest.publication}…</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-16 lg:py-28">
+    <p class="label mb-10 flex items-center gap-3 text-paper/60" data-reveal>
+      <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/02</span> What I do
+    </p>
+    <p class="max-w-6xl text-[clamp(1.9rem,4.4vw,4.25rem)] leading-[1.08] font-semibold tracking-[-0.035em]" data-scrub-text>
+      I help turn product ideas into clear, reliable interfaces. Most of my work is frontend, from design handoff to shipped screens, but I
+      also enjoy building the backend pieces that make the product work. That has meant APIs, services and data flows with Rust, Go,
+      Node and Postgres.
+    </p>
+
+    <dl class="mt-16 grid grid-cols-2 border-2 border-ink bg-slate-700 shadow-(--shadow-brutal) lg:mt-24 lg:grid-cols-3">
+      {
+        [
+          { n: 10, s: '+', l: 'Years shipping production UI' },
+          { n: 100, s: '+', l: 'Published technical articles' },
+          { n: 10, s: 'k+', l: 'Developers reached monthly' },
+        ].map((st, i) => (
+          <div class:list={['p-5 sm:p-8', i % 2 === 0 && 'border-r-2 border-ink', i < 2 && 'border-b-2 border-ink lg:border-b-0', i === 1 && 'lg:border-r-2']}>
+            <dt class="sr-only">{st.l}</dt>
+            <dd>
+              <span class="block text-[clamp(3rem,7vw,6rem)] leading-none font-bold tracking-[-0.06em] text-acid">
+                <span data-count={st.n}>{st.n}</span>
+                {st.s}
+              </span>
+              <span class="mt-3 block text-sm text-paper/80">{st.l}</span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="relative lg:h-svh lg:overflow-hidden" data-hscroll aria-labelledby="work-title">
+    <div class="container-x flex h-full flex-col justify-center py-16 lg:py-0">
+      <div class="mb-10 flex items-end justify-between gap-6 lg:mb-12">
+        <div>
+          <p class="label mb-4 flex items-center gap-3 text-paper/60"><span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/03</span> Selected work</p>
+          <h2 id="work-title" class="text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.9] font-bold tracking-[-0.045em]" data-split>
+            Things I've <span class="serif text-acid">shipped.</span>
+          </h2>
+        </div>
+        <div class="hidden w-64 lg:block">
+          <p class="label mb-2 text-paper/50">Scroll →</p>
+          <div class="h-3 border-2 border-ink bg-slate-700"><div class="h-full origin-left tf-sx0 bg-acid" data-hscroll-bar></div></div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-8 lg:w-max lg:flex-row lg:gap-10 lg:pr-12" data-hscroll-track>
+        {
+          featured.map((p, i) => (
+            <div class="w-full lg:w-[min(34rem,40vw)]" data-hcard>
+              <ProjectCard project={p} index={i} tone={tones[i % tones.length]} />
+            </div>
+          ))
+        }
+        <a
+          href="/projects"
+          class="group card grid min-h-72 w-full place-items-center bg-slate-900 p-10 text-center transition-colors hover:bg-acid hover:text-ink lg:w-[24rem]"
+          data-hcard
+          data-cursor="All work"
+        >
+          <span>
+            <span class="block text-6xl font-bold tracking-tighter">All<br />projects</span>
+            <span class="mt-6 inline-grid size-16 place-items-center border-2 border-current transition-transform duration-500 group-hover:-rotate-45">→</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-24 lg:py-40">
+    <SectionHead index="04" label="Capabilities" title="Balancing sharp design with" accent="useful code." class="mb-16 lg:mb-24" />
+    <div class="relative" data-stack>
+      {
+        capabilities.map((c, i) => (
+          <article
+            class:list={['card mb-8 lg:sticky lg:mb-10 grid gap-8 p-6 text-ink sm:p-10 lg:grid-cols-12 lg:p-14', capTones[i]]}
+            style={`top: calc(6rem + ${i * 2.25}rem)`}
+            data-stack-card
+          >
+            <span class="text-[clamp(4rem,11vw,10rem)] leading-[0.8] font-bold tracking-[-0.07em] lg:col-span-4">0{i + 1}</span>
+            <div class="lg:col-span-8">
+              <h3 class="text-[clamp(2rem,4vw,3.5rem)] leading-none font-bold tracking-[-0.04em]">{c.title}</h3>
+              <p class="mt-6 max-w-2xl text-lg leading-relaxed opacity-80">{c.body}</p>
+              <ul class="mt-8 flex flex-wrap gap-2">
+                {c.tags.map((t) => (
+                  <li class="border-2 border-ink bg-paper px-3 py-1 font-mono text-xs font-bold shadow-(--shadow-brutal-sm)">{t}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ═════════════ WRITING (hover list) ═════════════ -->
+  <section class="container-x">
+    <SectionHead index="05" label="Writing" title="Notes from the" accent="workbench." class="mb-14">
+      <a href="/blog" class="btn btn-paper self-start lg:self-end" data-magnetic>All writing</a>
+    </SectionHead>
+
+    <div class="relative" data-hover-list>
+      <ul class="border-t-2 border-ink">
+        {
+          writing.map((w, i) => (
+            <li class="border-b-2 border-ink" data-reveal>
+              <a
+                href={w.href}
+                target={w.external ? '_blank' : undefined}
+                rel={w.external ? 'noopener' : undefined}
+                class="group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-7 transition-[padding,background-color] duration-500 hover:bg-acid hover:px-4 hover:text-ink sm:grid-cols-[4rem_1fr_12rem_auto] sm:py-9"
+                data-hover-src={w.image}
+                data-cursor="Read"
+              >
+                <span class="font-mono text-sm opacity-50">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-[clamp(1.35rem,2.8vw,2.4rem)] leading-tight font-semibold tracking-[-0.03em]">{w.title}</span>
+                <span class="label hidden opacity-60 sm:block">{w.meta}</span>
+                <span class="grid size-11 place-items-center border-2 border-current transition-transform duration-500 group-hover:-rotate-45">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="pointer-events-none invisible absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0" data-hover-float aria-hidden="true">
+        <img src={writing[0]?.image} alt="" class="[aspect-ratio:4_/_3] w-72 border-2 border-ink object-cover shadow-(--shadow-brutal)" />
+      </div>
+    </div>
+  </section>
+
+  <Contact />
+</Base>

@@ -1,0 +1,117 @@
+---
+import '@/lib/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { site } from '@/data/site';
+import Rail from '@/components/Rail.astro';
+import Header from '@/components/Header.astro';
+import Menu from '@/components/Menu.astro';
+import Footer from '@/components/Footer.astro';
+import Preloader from '@/components/Preloader.astro';
+import Cursor from '@/components/Cursor.astro';
+import PageTransition from '@/components/PageTransition.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = site.description,
+  image = '/images/miracle.webp',
+  type = 'website',
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#37474d" />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content={site.twitter} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <slot name="head" />
+    <ClientRouter />
+
+    <!-- mark JS early so no-JS visitors never get stuck behind hidden reveal states -->
+    <script is:inline data-astro-rerun>
+      document.documentElement.classList.add('js');
+      if (sessionStorage.getItem('mj:loaded')) document.documentElement.classList.add('is-returning');
+    </script>
+
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
+    <script is:inline define:vars={{ gaId: site.gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </head>
+
+  <body class="grain">
+    <a
+      href="#main"
+      class="fixed top-3 left-3 z-200 -translate-y-24 border-2 border-ink bg-acid px-4 py-2 font-semibold text-ink focus:translate-y-0"
+      >Skip to content</a
+    >
+
+    <Preloader />
+    <PageTransition />
+    <Cursor />
+    <Menu />
+    <Rail />
+
+    <div class="pl-rail">
+      <Header />
+      <main id="main" data-page={Astro.url.pathname}>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <script>
+      import '@/lib/scripts/app';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* reveal targets start hidden only when JS is running */*/
+  html.js [data-reveal] {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js [data-reveal] {
+      opacity: 1;
+    }
+  }
+</style>

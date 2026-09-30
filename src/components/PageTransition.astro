@@ -1,0 +1,23 @@
+<div class="pointer-events-none fixed inset-0 z-140" transition:persist="curtain" data-curtain aria-hidden="true">
+  <div class="absolute inset-0 grid grid-cols-4 lg:grid-cols-6">
+    {
+      Array.from({ length: 6 }).map((_, i) => (
+        <span
+          class:list={[
+            'origin-top tf-sy0 border-x-2 border-ink',
+            i >= 4 && 'hidden lg:block',
+            ['bg-slate-900', 'bg-acid', 'bg-slate-600', 'bg-flame', 'bg-lilac', 'bg-slate-900'][i],
+          ]}
+          data-curtain-slab
+        />
+      ))
+    }
+  </div>
+  <div class="absolute inset-0 grid place-items-center">
+    <div class="overflow-hidden">
+      <p class="invisible border-2 border-ink bg-paper px-6 py-3 text-[clamp(2.5rem,10vw,9rem)] leading-none font-bold tracking-tighter text-ink shadow-(--shadow-brutal-lg) sm:px-10" data-curtain-label>
+        Home
+      </p>
+    </div>
+  </div>
+</div>

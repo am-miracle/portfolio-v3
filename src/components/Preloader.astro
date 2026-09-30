@@ -1,0 +1,36 @@
+<div
+  class="fixed inset-0 z-150 flex flex-col justify-between overflow-hidden bg-slate-900 text-paper"
+  transition:persist="preloader"
+  data-preloader
+  aria-hidden="true"
+>
+  <div class="container-x flex items-center justify-between pt-8">
+    <span class="label text-paper/50">Miracle Jude ©</span>
+    <span class="label text-paper/50">Portfolio / v3</span>
+  </div>
+
+  <div class="container-x">
+    <p class="overflow-hidden text-[clamp(3rem,13vw,13rem)] leading-[0.85] font-bold tracking-tighter">
+      {'LOADING'.split('').map((c) => <span class="inline-block" data-pl-char>{c}</span>)}
+    </p>
+  </div>
+
+  <div class="container-x flex items-end justify-between gap-6 pb-8">
+    <div class="h-4 flex-1 border-2 border-ink bg-slate-700 shadow-(--shadow-brutal-sm)">
+      <div class="h-full origin-left tf-sx0 bg-acid" data-pl-bar></div>
+    </div>
+    <span class="font-mono text-[clamp(3rem,10vw,8rem)] leading-none font-bold tabular-nums" data-pl-count>000</span>
+  </div>
+
+  <!-- exit slabs -->
+  <div class="pointer-events-none absolute inset-0 grid grid-cols-5">
+    {Array.from({ length: 5 }).map(() => <span class="origin-bottom tf-sy0 border-x border-ink bg-acid" data-pl-slab />)}
+  </div>
+</div>
+
+<style>
+  :global(html:not(.js)) [data-preloader],
+  :global(html.is-returning) [data-preloader] {
+    display: none;
+  }
+</style>

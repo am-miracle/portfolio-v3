@@ -1,0 +1,44 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/about.html"
+  to = "/about"
+  status = 301
+[[redirects]]
+  from = "/project.html"
+  to = "/projects"
+  status = 301
+[[redirects]]
+  from = "/article.html"
+  to = "/blog"
+  status = 301
+[[redirects]]
+  from = "/blog.html"
+  to = "/blog"
+  status = 301
+[[redirects]]
+  from = "/articles/:slug.html"
+  to = "/blog/:slug"
+  status = 301
+[[redirects]]
+  from = "/article-detail.html"
+  to = "/blog"
+  status = 301
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/model/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

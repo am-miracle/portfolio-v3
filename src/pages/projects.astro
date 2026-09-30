@@ -1,0 +1,141 @@
+---
+import Base from '@/layouts/Base.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import { projects, categories, pens, backendSystems, openSource } from '@/data/projects';
+import { socials } from '@/data/site';
+
+const tones = ['paper', 'acid', 'lilac', 'sky', 'flame', 'slate'] as const;
+const github = socials.find((s) => s.short === 'Gh')!.href;
+---
+
+<Base title="Projects" description="Client work, frontend projects, backend systems and experiments by Miracle Jude.">
+  <section class="container-x pt-10 lg:pt-16" data-filter-root>
+    <p class="label mb-8 flex items-center gap-3 text-paper/60" data-reveal>
+      <span class="border-2 border-ink bg-acid px-2 py-0.5 text-ink">/02</span> Projects
+    </p>
+    <div class="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+      <h1 class="text-[clamp(3.2rem,11vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em]" data-split>
+        Work <span class="serif text-acid">&</span> play.
+      </h1>
+      <p class="max-w-md text-lg text-paper/65" data-reveal>
+        A mix of client work, side projects and things I built while learning. <span class="text-paper"><span data-filter-count>{String(projects.length).padStart(2, '0')}</span> shown.</span>
+      </p>
+    </div>
+
+    <div class="sticky top-3 z-30 mt-14 flex flex-wrap gap-3 lg:top-6" role="toolbar" aria-label="Filter projects" data-reveal>
+      {
+        categories.map((c, i) => (
+          <button
+            type="button"
+            class="chip px-4 py-2 text-sm font-bold transition-[translate,background-color,color] hover:-translate-y-0.5 aria-pressed:bg-acid aria-pressed:text-ink"
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            data-filter={c.id}
+          >
+            {c.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+      {
+        projects.map((p, i) => (
+          <div data-filter-item={p.category} data-reveal>
+            <ProjectCard project={p} index={i} tone={tones[i % tones.length]} />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-14 flex justify-center">
+      <a href={github} target="_blank" rel="noopener" class="btn btn-paper" data-magnetic data-cursor="GitHub">More on GitHub ↗</a>
+    </div>
+  </section>
+
+  <section class="container-x pt-28 lg:pt-40">
+    <SectionHead index="03" label="Backend" title="Backend" accent="systems." class="mb-12" />
+    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {
+        backendSystems.map((s, i) => (
+          <li data-reveal>
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener"
+              class="group card flex h-full min-h-72 flex-col justify-between gap-8 bg-slate-900 p-6 transition-colors duration-500 hover:bg-acid hover:text-ink"
+              data-tilt
+              data-cursor="Code"
+            >
+              <span class="flex items-center justify-between font-mono text-sm opacity-60">
+                sys_{String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="flex flex-col gap-3">
+                <span class="text-3xl leading-none font-bold tracking-[-0.04em]">{s.title}</span>
+                <span class="text-sm opacity-70">{s.summary}</span>
+              </span>
+              <span class="flex items-center justify-between font-mono text-xs uppercase">
+                {s.language} <span class="transition-transform duration-500 group-hover:translate-x-2">→</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <ul class="mt-6 flex flex-col gap-6">
+      {
+        openSource.map((o) => (
+          <li data-reveal>
+            <a
+              href={o.href}
+              target="_blank"
+              rel="noopener"
+              class="group card flex flex-col gap-6 bg-slate-900 p-6 transition-colors duration-500 hover:bg-acid hover:text-ink lg:flex-row lg:items-start lg:justify-between lg:p-8"
+              data-cursor="Code"
+            >
+              <span class="flex shrink-0 flex-col gap-2 lg:w-1/3">
+                <span class="font-mono text-xs uppercase opacity-60">
+                  {o.role} / {o.year} / {o.location}
+                </span>
+                <span class="text-4xl leading-none font-bold tracking-[-0.04em]">{o.title}</span>
+              </span>
+              <span class="max-w-2xl text-base opacity-75">{o.summary}</span>
+              <span class="transition-transform duration-500 group-hover:translate-x-2">→</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container-x pt-28 lg:pt-40">
+    <SectionHead index="04" label="CodePen" title="Small" accent="pens." class="mb-12" />
+    <ul class="grid gap-6 md:grid-cols-3">
+      {
+        pens.map((pen, i) => (
+          <li data-reveal>
+            <a
+              href={pen.href}
+              target="_blank"
+              rel="noopener"
+              class="group card flex [aspect-ratio:4_/_3] flex-col justify-between bg-slate-900 p-6 transition-colors duration-500 hover:bg-acid hover:text-ink"
+              data-tilt
+              data-cursor="Open"
+            >
+              <span class="font-mono text-sm opacity-60">pen_{String(i + 1).padStart(2, '0')}.html</span>
+              <span class="text-3xl leading-none font-bold tracking-[-0.04em]">{pen.title}</span>
+              <span class="flex items-center justify-between font-mono text-xs uppercase">
+                codepen.io/judeiv <span class="transition-transform duration-500 group-hover:translate-x-2">→</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-14 flex justify-center">
+      <a href="https://codepen.io/JudeIV" target="_blank" rel="noopener" class="btn btn-paper" data-magnetic data-cursor="CodePen">More on CodePen ↗</a>
+    </div>
+  </section>
+</Base>

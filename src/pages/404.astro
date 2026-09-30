@@ -1,0 +1,18 @@
+---
+import Base from '@/layouts/Base.astro';
+---
+
+<Base title="Not found" description="This page doesn't exist.">
+  <section class="container-x grid min-h-[70svh] place-items-center text-center">
+    <div>
+      <p class="text-[clamp(7rem,32vw,26rem)] leading-[0.8] font-bold tracking-[-0.08em] text-acid [text-shadow:10px_10px_0_var(--color-ink)]" data-split>
+        404
+      </p>
+      <p class="mt-8 text-2xl font-semibold" data-reveal>This page wandered off. <span class="serif text-acid">Happens.</span></p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4" data-reveal>
+        <a href="/" class="btn" data-magnetic>Take me home</a>
+        <a href="/projects" class="btn btn-ghost" data-magnetic>See projects</a>
+      </div>
+    </div>
+  </section>
+</Base>
