@@ -23,3 +23,7 @@ Blog posts come from Hygraph at build time. Set `HYGRAPH_ENDPOINT` (see `.env.ex
 ## License
 
 The code is [MIT](LICENSE) licensed, so feel free to fork it. My photos, project images, bio, copy and articles (`public/`, `src/data/` and blog content) are not covered and all rights are reserved. Replace them with your own, and please leave the footer attribution.
+
+## Support
+
+If this helped you out, consider leaving a star ⭐ on the repo — it helps more people find the project.
